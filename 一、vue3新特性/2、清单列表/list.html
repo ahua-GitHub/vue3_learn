@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="app">
+        <input type="text" v-model="value" @keydown.enter="addList">
+        <ul >
+            <li v-for="item in list.filter(e => e.active != '')">
+                <input type="checkbox" v-model="item.done">
+                <span :class="{show:item.done}">{{item.active}}</span>
+                <button @click="deleteItem">删除</button>
+            </li>
+            <input type="checkbox" v-model="allDone"> 
+            <span>未完成/总量 :  {{undone}} / {{all}}</span>
+        </ul>
+    </div>
+<script>
+    const App = {
+        data() {
+            return {
+                //定义数据
+                value:'',
+                list:[
+                    {
+                        active:'',
+                        done:''
+
+                    }
+                ]
+            }
+        },
+        methods:{
+            addList(){
+                this.list.push({
+                    active:this.value,
+                    done:false
+                })
+            },
+            deleteItem(){
+                
+                this.list.pop()
+            }
+        },
+        computed:{
+            undone(){
+                return this.list.filter(e => e.done == false  && e.active != '' ).length
+            },
+            all(){
+                return this.list.filter(e => e.active != '' ).length
+            },
+            allDone:{
+                // 调用allDone时执行
+                get:function(){
+                    return this.undone === 0
+                },
+                // 修改allDone时执行
+                set:function(val){
+                    return this.list.forEach(element => {
+                        element.done = val
+                    });
+                }
+                // 修改时调用set，调用/查找时调用get，因为绑定了checbox，选中即调用，选中即修改，所以改变checkbox值get和set都会触发（先set，后get）
+                // 后getallDone就会返回this.undone === 0，未完成=0 ，改变全选checkbox而未完成没有显示0是因为undone也为计算属性，set修改了done的值，undone会根据依赖的值进行修改
+            }
+        }
+    }
+    // 创建vue应用
+    Vue.createApp(App).mount('#app')
+    
+</script>
+
+<style>
+    .show{
+        background-color: gray;
+        text-decoration: line-through;
+    }
+</style>
+
+
+
+
+
+
+</body>
+</html>

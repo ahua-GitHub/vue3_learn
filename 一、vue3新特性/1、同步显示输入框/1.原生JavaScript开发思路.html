@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="inputText" type="text">
+    <div id="showInputText"></div>
+
+    <script>
+            // 1.获取input节点
+    const inputText = document.getElementById("inputText")
+    const showInputText = document.getElementById("showInputText")
+    // 2.给元素绑定事件
+    inputText.addEventListener("input",function(){
+        // 3.获取输入值，修改元素内容
+        showInputText.innerText = this.value;
+    })
+    </script>
+    
+</body>
+</html>
